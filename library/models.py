@@ -24,6 +24,9 @@ class Book(models.Model):
     publication_date = models.PositiveIntegerField(verbose_name="Год издания книги")
     user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, verbose_name="Книга на руках у:",
                              related_name='user')
+    date_the_book_was_taken = models.DateTimeField(blank=True, null=True, verbose_name="Дата выдачи книги")
+    date_when_the_book_was_returned = models.DateTimeField(blank=True, null=True, verbose_name="Дата возврата книги")
+    book_return_date = models.DateTimeField(blank=True, null=True, verbose_name="Дата возврата книги")
 
     def __str__(self):
         return self.title
