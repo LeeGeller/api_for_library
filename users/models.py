@@ -5,8 +5,9 @@ from django.db import models
 class User(AbstractUser):
     username = None
 
-    email = models.EmailField(verbose_name='Email')
+    email = models.EmailField(verbose_name='Email', unique=True)
     token = models.TextField(verbose_name='Токен')
+    is_active = models.BooleanField(default=False, verbose_name='Активирован')
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
