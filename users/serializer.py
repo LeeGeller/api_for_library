@@ -1,7 +1,8 @@
-import uuid
+import secrets
 
 from rest_framework import serializers
 
+from library.serializer import BookSerializer
 from users.models import User
 
 
@@ -13,6 +14,14 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User(**validated_data)
         user.set_password(validated_data['password'])
-        user.token = str(uuid.uuid4())
+        user.token = secrets.token_hex(16)
         user.save()
         return user
+
+
+class UserDetailSerializer(serializers.ModelSerializer):
+    book = BookSerializer()
+
+    class Meta:
+        model = User
+        fields = '__all__'
