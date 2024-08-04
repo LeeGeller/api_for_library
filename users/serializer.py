@@ -20,8 +20,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserDetailSerializer(serializers.ModelSerializer):
-    book = BookSerializer()
+    books = BookSerializer(many=True, read_only=True)
 
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ['id', 'email', 'books']

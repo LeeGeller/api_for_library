@@ -19,11 +19,11 @@ class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all().prefetch_related('author')
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticated, IsStaff, ]
-    filter_backends = [DjangoFilterBackend, OrderingFilter, ]
-    filterset_fields = ['title', 'author__name', 'author__surname',
-                        'genre', 'year_of_writen', 'publication_date', ]
-    ordering_fields = ['title', 'author__name', 'author__surname',
-                       'genre', 'year_of_writen', 'publication_date', ]
+    # filter_backends = [DjangoFilterBackend, OrderingFilter, ]
+    # filterset_fields = ['title', 'author__name', 'author__surname',
+    #                     'genre', 'year_of_writen', 'publication_date', ]
+    # ordering_fields = ['title', 'author__name', 'author__surname',
+    #                    'genre', 'year_of_writen', 'publication_date', ]
 
     def update(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

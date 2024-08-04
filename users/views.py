@@ -1,6 +1,7 @@
 from django.core.mail import send_mail
-from django_filters.rest_framework import DjangoFilterBackend, OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
+from rest_framework.filters import OrderingFilter
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -34,17 +35,20 @@ class UserCreateAPIView(CreateAPIView):
 
 
 class UsersListAPIView(ListAPIView):
-    queryset = User.objects.all().select_related('book')
+    queryset = User.objects.all().prefetch_related('books')
     serializer_class = UserDetailSerializer
     permission_classes = [IsAuthenticated, IsStaff, ]
     filter_backends = [DjangoFilterBackend, OrderingFilter, ]
-    filterset_fields = ['email', 'book__title', 'book__date_the_book_was_taken',
-                        'book__book_return_date', 'book__date_when_the_book_was_returned']
-    ordering_fields = ['book__date_the_book_was_taken',
-                       'book__book_return_date', 'book__date_when_the_book_was_returned', ]
+    filterset_fields = '__all__'
+    ordering_fields = ['date_the_book_was_taken', 'book_return_date',
+                       'date_when_the_book_was_returned']
 
 
 class UserRetrieveAPIView(RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserDetailSerializer
     permission_classes = [IsAuthenticated, IsStaff, ]
+    filter_backends = [DjangoFilterBackend, OrderingFilter, ]
+    filterset_fields = '__all__'
+    ordering_fields = ['date_the_book_was_taken', 'book_return_date',
+                       'date_when_the_book_was_returned']
