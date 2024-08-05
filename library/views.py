@@ -1,8 +1,7 @@
-from datetime import timedelta
-
-from django_filters.rest_framework import DjangoFilterBackend, OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import OrderingFilter
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from library.models import Author, Book
 from library.serializer import AuthorSerializer, BookSerializer
@@ -14,22 +13,21 @@ class AuthorViewSet(viewsets.ModelViewSet):
     serializer_class = AuthorSerializer
     permission_classes = [IsAuthenticated, IsStaff, ]
 
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            self.permission_classes = [AllowAny, ]
+        return super().get_permissions()
+
 
 class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all().prefetch_related('author')
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticated, IsStaff, ]
-    # filter_backends = [DjangoFilterBackend, OrderingFilter, ]
-    # filterset_fields = ['title', 'author__name', 'author__surname',
-    #                     'genre', 'year_of_writen', 'publication_date', ]
-    # ordering_fields = ['title', 'author__name', 'author__surname',
-    #                    'genre', 'year_of_writen', 'publication_date', ]
+    filter_backends = [DjangoFilterBackend, OrderingFilter, ]
+    filterset_fields = '__all__'
+    ordering_fields = ['year_of_writen', 'publication_date', 'title', 'genre', 'author__name', 'author__surname']
 
-    def update(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        validate_data = serializer.validated_data
-        date_the_book_was_taken = validate_data.get('date_the_book_was_taken')
-        if validate_data['date_when_the_book_was_returned']:
-            validate_data['date_when_the_book_was_returned'] = date_the_book_was_taken + timedelta(days=30)
-        return super().update(request, *args, **kwargs)
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            self.permission_classes = [AllowAny, ]
+        return super().get_permissions()
