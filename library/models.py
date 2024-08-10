@@ -23,8 +23,6 @@ class Book(models.Model):
     genre = models.TextField(verbose_name="Жанр книги")
     year_of_writen = models.PositiveIntegerField(verbose_name="Год написания книги")
     publication_date = models.PositiveIntegerField(verbose_name="Год издания книги")
-    user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, verbose_name="Книга на руках у:",
-                             related_name='books')
     count = models.PositiveIntegerField(verbose_name="Количество книг", default=1)
 
     def __str__(self):
@@ -38,9 +36,10 @@ class Book(models.Model):
 class LogService(models.Model):
     book = models.ManyToManyField(Book, verbose_name="Книги", related_name='book')
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Пользователь", related_name='user')
-    date_the_book_was_taken = models.DateTimeField(default=None, blank=True, null=True,
+    date_the_book_was_taken = models.DateTimeField(auto_now=True, blank=True, null=True,
                                                    verbose_name="Дата выдачи книги")
     date_when_the_book_was_returned = models.DateTimeField(default=None, blank=True, null=True,
                                                            verbose_name="Когда книгу нужно вернуть")
     book_return_date = models.DateTimeField(default=None, blank=True, null=True,
                                             verbose_name="Когда книга была возвращена")
+    book_on_user = models.BooleanField(default=True, verbose_name="Книга на руках у пользователя")

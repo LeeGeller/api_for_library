@@ -2,7 +2,6 @@ import secrets
 
 from rest_framework import serializers
 
-from library.models import LogService
 from users.models import User
 
 

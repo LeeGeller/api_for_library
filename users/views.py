@@ -2,7 +2,7 @@ from django.core.mail import send_mail
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
 from rest_framework.filters import OrderingFilter
-from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
@@ -35,20 +35,23 @@ class UserCreateAPIView(CreateAPIView):
 
 
 class UsersListAPIView(ListAPIView):
-    queryset = User.objects.all().prefetch_related('books')
+    queryset = User.objects.all()
     serializer_class = UserDetailSerializer
     permission_classes = [IsAuthenticated, IsStaff, ]
     filter_backends = [DjangoFilterBackend, OrderingFilter, ]
     filterset_fields = '__all__'
-    ordering_fields = ['date_the_book_was_taken', 'book_return_date',
-                       'date_when_the_book_was_returned']
+    ordering_fields = ['username', 'email']
 
 
 class UserRetrieveAPIView(RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserDetailSerializer
     permission_classes = [IsAuthenticated, IsStaff, ]
-    filter_backends = [DjangoFilterBackend, OrderingFilter, ]
+    filter_backends = [DjangoFilterBackend, ]
     filterset_fields = '__all__'
-    ordering_fields = ['date_the_book_was_taken', 'book_return_date',
-                       'date_when_the_book_was_returned']
+
+
+class UserUpdateAPIView(UpdateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserDetailSerializer
+    permission_classes = [IsAuthenticated, IsStaff, ]
