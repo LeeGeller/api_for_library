@@ -10,9 +10,9 @@ class AuthorAdmin(admin.ModelAdmin):
 
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
-    list_display = ['title', 'author', 'genre', 'year_of_writen', 'publication_date']
+    list_display = ['title', 'genre', 'year_of_writen', 'publication_date']
 
 
 @admin.register(LogService)
 class LogServiceAdmin(admin.ModelAdmin):
-    list_display = ['book', 'user', 'date_the_book_was_taken', 'date_when_the_book_was_returned', 'book_return_date']
+    list_display = ['date_the_book_was_taken', 'date_when_the_book_was_returned', 'book_return_date']
