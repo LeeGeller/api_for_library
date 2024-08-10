@@ -2,7 +2,7 @@ import secrets
 
 from rest_framework import serializers
 
-from library.serializer import BookSerializer
+from library.models import LogService
 from users.models import User
 
 
@@ -20,8 +20,6 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserDetailSerializer(serializers.ModelSerializer):
-    books = BookSerializer(many=True, read_only=True)
-
     class Meta:
         model = User
-        fields = ['id', 'email', 'books']
+        fields = ['id', 'email', ]
