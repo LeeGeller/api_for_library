@@ -25,16 +25,21 @@ class BookSerializer(serializers.ModelSerializer):
 
 class LogServiceSerializer(serializers.ModelSerializer):
     book = serializers.PrimaryKeyRelatedField(queryset=Book.objects.all(), many=True)
-    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=True)
 
     def create(self, validated_data):
         books = validated_data.pop('book')
+        users = validated_data.pop('user')
+
         if not check_count_of_book(books):
             raise serializers.ValidationError('Книги закончились')
 
         log = LogService.objects.create(**validated_data)
         log.date_when_the_book_was_returned = datetime.now(pytz.timezone(settings.TIME_ZONE)) + timedelta(days=30)
         log.save()
+
+        log.book.set(book.id for book in books)
+        log.user.set([user.id for user in users])
 
         for book in books:
             book_instance = Book.objects.get(id=book.id)

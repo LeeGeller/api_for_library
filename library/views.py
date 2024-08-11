@@ -32,7 +32,7 @@ class BookViewSet(LibrarianPermissionMixin, viewsets.ModelViewSet):
 
 
 class LogServiceListAPIView(ListAPIView):
-    queryset = LogService.objects.all()
+    queryset = LogService.objects.all().prefetch_related('book')
     serializer_class = LogServiceSerializer
     permission_classes = [IsAuthenticated, IsStaff, ]
     filter_backends = [DjangoFilterBackend, OrderingFilter, ]
