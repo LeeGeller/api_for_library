@@ -53,8 +53,14 @@ class LogServiceCreateAPIView(CreateAPIView):
     serializer_class = LogServiceSerializer
     permission_classes = [IsAuthenticated, ]
 
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
 
 class LogServiceUpdateAPIView(UpdateAPIView):
     queryset = LogService.objects.all()
     serializer_class = LogServiceSerializer
     permission_classes = [IsAuthenticated, ]
+
+    def perform_update(self, serializer):
+        serializer.save(user=self.request.user)
