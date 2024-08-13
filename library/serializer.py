@@ -69,4 +69,4 @@ class LogServiceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = LogService
-        fields = ['book', ]
+        fields = ['book', 'user']
