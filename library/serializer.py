@@ -25,7 +25,7 @@ class BookSerializer(serializers.ModelSerializer):
 
 class LogServiceSerializer(serializers.ModelSerializer):
     book = serializers.PrimaryKeyRelatedField(queryset=Book.objects.all(), many=True)
-    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=True)
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     def create(self, validated_data):
         books = validated_data.pop('book')
@@ -69,4 +69,4 @@ class LogServiceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = LogService
-        fields = '__all__'
+        fields = ['book', ]
