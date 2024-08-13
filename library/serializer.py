@@ -6,7 +6,6 @@ from rest_framework import serializers
 from config import settings
 from library.models import Author, Book, LogService
 from library.services import check_count_of_book
-from users.models import User
 
 
 class AuthorSerializer(serializers.ModelSerializer):
