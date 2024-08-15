@@ -5,7 +5,7 @@ from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView,
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from library.models import Author, Book, LogService
-from library.serializer import AuthorSerializer, BookSerializer, LogServiceSerializer
+from library.serializer import AuthorSerializer, BookSerializer, LogServiceSerializer, LogServiceSerializerList
 from users.permissions import IsStaff
 
 
@@ -32,12 +32,12 @@ class BookViewSet(LibrarianPermissionMixin, viewsets.ModelViewSet):
 
 
 class LogServiceListAPIView(ListAPIView):
-    queryset = LogService.objects.all().prefetch_related('book')
-    serializer_class = LogServiceSerializer
+    queryset = LogService.objects.all().prefetch_related('id_books_list')
+    serializer_class = LogServiceSerializerList
     permission_classes = [IsAuthenticated, IsStaff, ]
     filter_backends = [DjangoFilterBackend, OrderingFilter, ]
     filterset_fields = '__all__'
-    ordering_fields = ['date_the_book_was_taken', 'date_when_the_book_was_returned', 'book_return_date', ]
+    ordering_fields = ['date_the_book_was_taken', 'date_when_the_book_was_returned', 'book_return_date', 'user']
 
 
 class LogServiceRetrieveAPIView(RetrieveAPIView):
