@@ -1,4 +1,5 @@
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets
 from rest_framework.filters import OrderingFilter
@@ -57,14 +58,19 @@ class LogServiceCreateAPIView(CreateAPIView):
     @swagger_auto_schema(
         operation_description="Create a log entry for borrowing books. The user is automatically assigned. "
                               "id_books_list is a list with books' ids."
-                              "This view create a LogService for a user.",
-        request_body=LogServiceSerializer,
+                              " This view creates a LogService entry for a user.",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'id_books_list': openapi.Schema(
+                    type=openapi.TYPE_ARRAY,
+                    items=openapi.Items(type=openapi.TYPE_INTEGER),
+                    example=[1, 2, 3]  # Пример для массива ID книг
+                ),
+            },
+            required=['id_books_list']
+        ),
         responses={201: LogServiceSerializer},
-        examples={
-            'application/json': {
-                "id_books_list": [1, 2, 3],
-            }
-        }
     )
     def post(self, request, *args, **kwargs):
         return super().post(request, *args, **kwargs)
@@ -80,15 +86,19 @@ class LogServiceUpdateAPIView(UpdateAPIView):
 
     @swagger_auto_schema(
         operation_description="Update a log entry to return borrowed books. The user is automatically assigned."
-                              "id for returned books is an id of LogService model. "
-                              "id_books_list is a list with books' ids.",
-        request_body=LogServiceSerializer,
+                              " id for returned books is an id of LogService model."
+                              " id_books_list is a list with books' ids.",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'id_books_list': openapi.Schema(
+                    type=openapi.TYPE_ARRAY,
+                    items=openapi.Items(type=openapi.TYPE_INTEGER),
+                    example=[1, 2, 3]
+                ),
+            },
+        ),
         responses={200: LogServiceSerializer},
-        examples={
-            'application/json': {
-                "id_books_list": [1, 2, 3],
-            }
-        }
     )
     def post(self, request, *args, **kwargs):
         return super().put(request, *args, **kwargs)
