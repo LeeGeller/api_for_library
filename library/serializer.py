@@ -67,7 +67,8 @@ class LogServiceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = LogService
-        fields = ['id_books_list', 'user', 'book_on_user', 'date_when_the_book_was_returned']
+        fields = ['id_books_list', 'user']
+
 
 class LogServiceSerializerList(serializers.ModelSerializer):
     class Meta:
