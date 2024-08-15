@@ -68,6 +68,11 @@ class LogServiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = LogService
         fields = ['id_books_list', 'user']
+        extra_kwargs = {
+            'id_books_list': {
+                'example': [1, 2],  # Пример списка ID книг
+            },
+        }
 
 
 class LogServiceSerializerList(serializers.ModelSerializer):
