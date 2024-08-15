@@ -34,8 +34,8 @@ class Book(models.Model):
 
 
 class LogService(models.Model):
-    book = models.ManyToManyField(Book, verbose_name="Книги", related_name='book')
-    user = models.ManyToManyField(User, verbose_name="Пользователь", related_name='user')
+    id_books_list = models.ManyToManyField(Book, verbose_name="Книги", related_name='id_books_list')
+    user = models.ForeignKey(User, verbose_name="Пользователь", related_name='user', on_delete=models.CASCADE)
     date_the_book_was_taken = models.DateTimeField(auto_now=True, blank=True, null=True,
                                                    verbose_name="Дата выдачи книги")
     date_when_the_book_was_returned = models.DateTimeField(default=None, blank=True, null=True,
